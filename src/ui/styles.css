@@ -14,14 +14,18 @@ body {
 
 .stocks-list {
     width: 30vw;
-    height: calc(65vh - 80px);
+    height: calc(65vh - 80px - 34px);
 }
 
 .stock-graph {
     width: 70vw;
-    height: calc(65vh - 80px);
+    height: calc(65vh - 80px - 34px);
 }
 
 .portfolio {
     height: 35vh;
+}
+
+.footer {
+    height: 34px;
 }
