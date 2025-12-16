@@ -31,12 +31,12 @@ npm run dev
 
 ## Myop Components
 
-The application uses the following Myop components located in the `myopComponents/` directory:
+The application uses the following Myop components :
 
-### Top Bar (`topBar.html`)
+### Top Bar 
 Navigation header component displaying the application branding and navigation elements.
 
-### Stocks List (`stocksList.html`)
+### Stocks List 
 Displays a searchable list of stocks with the following features:
 - Search functionality to filter stocks by symbol or name
 - Tab navigation between "All Stocks" and "My Portfolio" views
@@ -44,7 +44,7 @@ Displays a searchable list of stocks with the following features:
 - Double-click on a stock to view its chart
 - Visual selection state for the currently selected stock
 
-### Stock Graph (`graph.html`)
+### Stock Graph 
 Interactive stock price chart component featuring:
 - Line chart with gradient fill showing price history
 - Volume bars displayed below the price chart
@@ -54,18 +54,17 @@ Interactive stock price chart component featuring:
 - Animated chart transitions when switching stocks or time ranges
 - Empty state when no stock is selected
 
-### Portfolio (`portfolio.html`)
+### Portfolio
 Portfolio holdings table displaying:
 - Summary stats (total value, gain/loss)
 - Holdings list with stock symbol, quantity, entry price, current price, and gain/loss
 - Empty state when no holdings exist
 - Click on a holding to view its details
 
-### Footer (`footer.html`)
+### Footer
 Simple footer component displaying a disclaimer: "Practice trading platform — No real money involved. All trades are simulated for educational purposes only."
 
 ## Tech Stack
-
 - React 18
 - TypeScript
 - Vite

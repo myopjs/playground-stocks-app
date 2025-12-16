@@ -6,6 +6,7 @@ import {StocksList} from "./StocksList";
 import {getMockMarket, Stock} from "../utils/market";
 import {StocksGraph} from "../ui/StockGraph";
 import {Portfolio} from "../ui/Portfolio";
+import {Loader} from "../ui/Loader";
 
 export function App() {
 
@@ -22,7 +23,7 @@ export function App() {
     return (
         <div>
             <header className="header">
-                <MyopComponent componentId={COMPONENTS_IDS.topBar}/>
+                <MyopComponent componentId={COMPONENTS_IDS.topBar} loader={<Loader/>}/>
             </header>
             <main>
                 <div className="main">
@@ -32,7 +33,7 @@ export function App() {
                 <Portfolio/>
             </main>
             <footer className="footer">
-                <MyopComponent componentId={COMPONENTS_IDS.footer}/>
+                <MyopComponent componentId={COMPONENTS_IDS.footer} loader={<Loader/>}/>
             </footer>
         </div>
     );

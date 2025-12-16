@@ -29,3 +29,9 @@ body {
 .footer {
     height: 34px;
 }
+
+.loader {
+    height: 100%;
+    width: 100%;
+    background-color: #1a1a1a;
+}

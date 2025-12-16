@@ -1,6 +1,7 @@
 import {MyopComponent} from "@myop/react";
 import {COMPONENTS_IDS} from "../utils/componentsIds";
 import './styles.css';
+import {Loader} from "../ui/Loader";
 
 export const Portfolio = () => {
 
@@ -28,7 +29,7 @@ export const Portfolio = () => {
 
 
     return <div className='portfolio'>
-        <MyopComponent componentId={COMPONENTS_IDS.portfolio} data={data} />
+        <MyopComponent componentId={COMPONENTS_IDS.portfolio} data={data} loader={<Loader/>} />
     </div>
 
 }

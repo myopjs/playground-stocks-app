@@ -3,6 +3,7 @@ import {COMPONENTS_IDS} from "../utils/componentsIds";
 import {Stock} from "../utils/market";
 import {useMemo, useCallback} from "react";
 import './styles.css';
+import {Loader} from "../ui/Loader";
 
 // Format expected by stocksList.html
 interface StockListItem {
@@ -53,6 +54,7 @@ export const StocksList = ({ stocks, selectedStock, onStockSelected }: StocksLis
             componentId={COMPONENTS_IDS.stockList}
             data={stocksData}
             on={handleCta as any}
+            loader={<Loader/>}
         />
     </div>
 
