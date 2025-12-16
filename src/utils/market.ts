@@ -42,3 +42,62 @@ export function formatChange(pct: number): string {
 }
 
 
+export function generateMockData(timeRange: string) {
+  const now = Date.now();
+  const data = [];
+  let numPoints, interval, basePrice = 50;
+
+  switch(timeRange) {
+    case '1D':
+      numPoints = 78;  // 5-min intervals for trading day
+      interval = 5 * 60 * 1000;
+      break;
+    case '5D':
+      numPoints = 40;  // Hourly for 5 days
+      interval = 60 * 60 * 1000;
+      break;
+    case '1M':
+      numPoints = 30;  // Daily for 1 month
+      interval = 24 * 60 * 60 * 1000;
+      break;
+    case '3M':
+      numPoints = 90;  // Daily for 3 months
+      interval = 24 * 60 * 60 * 1000;
+      break;
+    case '6M':
+      numPoints = 26;  // Weekly for 6 months
+      interval = 7 * 24 * 60 * 60 * 1000;
+      break;
+    case '1Y':
+      numPoints = 52;  // Weekly for 1 year
+      interval = 7 * 24 * 60 * 60 * 1000;
+      break;
+    case '3Y':
+      numPoints = 36;  // Monthly for 3 years
+      interval = 30 * 24 * 60 * 60 * 1000;
+      break;
+    case '5Y':
+      numPoints = 60;  // Monthly for 5 years
+      interval = 30 * 24 * 60 * 60 * 1000;
+      break;
+    default:
+      numPoints = 52;
+      interval = 7 * 24 * 60 * 60 * 1000;
+  }
+
+  for (let i = 0; i < numPoints; i++) {
+    const trend = (i / numPoints) * 15;  // Upward trend
+    const volatility = (Math.random() - 0.4) * 4;
+    basePrice = 50 + trend + volatility;
+    basePrice = Math.max(40, Math.min(75, basePrice));
+
+    data.push({
+      time: now - (numPoints - i) * interval,
+      price: parseFloat(basePrice.toFixed(2))
+    });
+  }
+
+  return data;
+}
+
+

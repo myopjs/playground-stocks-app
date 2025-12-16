@@ -1,30 +1,30 @@
-import { Route, Routes } from 'react-router-dom';
-import { HomePage } from './HomePage';
 import {MyopComponent} from "@myop/react";
-
-import { PortfolioPage } from './PortfolioPage';
+import './styles.css';
+import {useState} from "react";
+import {StocksList} from "./StocksList";
 import {COMPONENTS_IDS} from "../utils/componentsIds";
+import {generateMockData, getMockMarket, Stock} from "../utils/market";
+import {StocksGraph} from "../ui/StockGraph";
 
-//style={{ height: '500px'}}
 export function App() {
-  return (
-    <div>
-      <header>
-          <div>hey</div>
-          <MyopComponent onLoad={(c)=>{
-              console.log(c);
 
-              c.element.
-              debugger;
-          }} componentId={COMPONENTS_IDS.topBar} />
-      </header>
-      <main >
-        {/*<Routes>*/}
-        {/*  <Route path="/" element={<HomePage />} />*/}
-        {/*</Routes>*/}
-      </main>
-    </div>
-  );
+
+    const [stocks] = useState<Stock[]>(() => getMockMarket());
+    const [selected, setSelected] = useState<Stock | null>(null);
+
+
+
+    return (
+        <div>
+            <header className="header">
+                <MyopComponent componentId={COMPONENTS_IDS.topBar}/>
+            </header>
+            <main className="main">
+                <StocksList stocks={stocks} onStockSelected={setSelected}/>
+                <StocksGraph/>
+            </main>
+        </div>
+    );
 }
 
 
