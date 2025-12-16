@@ -17,10 +17,11 @@ interface StockListItem {
 
 interface StocksListProps {
     stocks: Stock[];
+    selectedStock: Stock | null;
     onStockSelected: (stock: Stock | null) => void;
 }
 
-export const StocksList = ({ stocks, onStockSelected }: StocksListProps) => {
+export const StocksList = ({ stocks, selectedStock, onStockSelected }: StocksListProps) => {
 
     // Transform stocks to format expected by stocksList.html
     const stocksData = useMemo(() => {
@@ -33,8 +34,8 @@ export const StocksList = ({ stocks, onStockSelected }: StocksListProps) => {
             updatedAt: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
             currency: '$'
         }));
-        return { stocks: transformedStocks };
-    }, [stocks]);
+        return { stocks: transformedStocks, selectedSymbol: selectedStock?.ticker || '' };
+    }, [stocks, selectedStock]);
 
     // Handle CTA from stocksList.html
     const handleCta = useCallback((action: string, payload: any) => {
