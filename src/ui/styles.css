@@ -1,0 +1,23 @@
+body {
+    margin: 0;
+}
+
+.header {
+    height: 80px;
+}
+
+
+.main {
+    display: flex;
+    flex-direction: row;
+}
+
+.stocks-list {
+    width: 400px;
+    height: calc(100vh - 80px);
+}
+
+.stock-graph {
+    width: calc(100vw - 400px);
+    height: calc(100vh - 80px);
+}
