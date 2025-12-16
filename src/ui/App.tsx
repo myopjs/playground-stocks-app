@@ -5,6 +5,7 @@ import {StocksList} from "./StocksList";
 import {COMPONENTS_IDS} from "../utils/componentsIds";
 import {generateMockData, getMockMarket, Stock} from "../utils/market";
 import {StocksGraph} from "../ui/StockGraph";
+import {Portfolio} from "../ui/Portfolio";
 
 export function App() {
 
@@ -19,10 +20,17 @@ export function App() {
             <header className="header">
                 <MyopComponent componentId={COMPONENTS_IDS.topBar}/>
             </header>
-            <main className="main">
-                <StocksList stocks={stocks} onStockSelected={setSelected}/>
-                <StocksGraph/>
+            <main >
+                <div className="main">
+                    <StocksList stocks={stocks} onStockSelected={setSelected}/>
+                    <StocksGraph/>
+                </div>
+                <Portfolio/>
             </main>
+            <footer>
+
+            </footer>
+
         </div>
     );
 }

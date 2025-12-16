@@ -8,5 +8,4 @@ export const StocksList = ({ stocks, onStockSelected } : {stocks: any[], onStock
         <MyopComponent componentId={COMPONENTS_IDS.stockList} data={stocks} on={onStockSelected} />
     </div>
 
-
 }
