@@ -1,11 +1,58 @@
 import {MyopComponent} from "@myop/react";
 import {COMPONENTS_IDS} from "../utils/componentsIds";
+import {Stock} from "../utils/market";
+import {useMemo, useCallback} from "react";
 import './styles.css';
 
-export const StocksList = ({ stocks, onStockSelected } : {stocks: any[], onStockSelected: any}) => {
+// Format expected by stocksList.html
+interface StockListItem {
+    symbol: string;
+    name: string;
+    price: number;
+    change: number;
+    changePercent: number;
+    updatedAt: string;
+    currency: string;
+}
+
+interface StocksListProps {
+    stocks: Stock[];
+    onStockSelected: (stock: Stock | null) => void;
+}
+
+export const StocksList = ({ stocks, onStockSelected }: StocksListProps) => {
+
+    // Transform stocks to format expected by stocksList.html
+    const stocksData = useMemo(() => {
+        const transformedStocks: StockListItem[] = stocks.map(stock => ({
+            symbol: stock.ticker,
+            name: stock.name,
+            price: stock.price,
+            change: stock.price * (stock.changePct / 100),
+            changePercent: stock.changePct,
+            updatedAt: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+            currency: '$'
+        }));
+        return { stocks: transformedStocks };
+    }, [stocks]);
+
+    // Handle CTA from stocksList.html
+    const handleCta = useCallback((action: string, payload: any) => {
+        console.log('CTA received:', action, payload);
+        if (action === 'stock_selected' && payload) {
+            console.log('Available stocks:', stocks.map(s => s.ticker));
+            const selectedStock = stocks.find(s => s.ticker === payload.symbol);
+            console.log('Found stock:', selectedStock);
+            onStockSelected(selectedStock || null);
+        }
+    }, [stocks, onStockSelected]);
 
     return <div className='stocks-list'>
-        <MyopComponent componentId={COMPONENTS_IDS.stockList} data={stocks} on={onStockSelected} />
+        <MyopComponent
+            componentId={COMPONENTS_IDS.stockList}
+            data={stocksData}
+            on={handleCta as any}
+        />
     </div>
 
 }

@@ -42,10 +42,41 @@ export function formatChange(pct: number): string {
 }
 
 
-export function generateMockData(timeRange: string) {
+export type TimeRange = '1D' | '5D' | '1M' | '3M' | '6M' | '1Y' | '3Y' | '5Y';
+
+export interface ChartDataPoint {
+  time: number;
+  price: number;
+}
+
+export interface TimeRangeData {
+  chartData: ChartDataPoint[];
+  currentPrice: number;
+  priceChange: number;
+  changePercent: number;
+}
+
+export interface StockGraphData {
+  stockSymbol: string;
+  stockName: string;
+  currentPrice: number;
+  priceChange: number;
+  changePercent: number;
+  timeRange: TimeRange;
+  chartData: ChartDataPoint[];
+}
+
+export interface StockGraphDataAllRanges {
+  stockSymbol: string;
+  stockName: string;
+  timeRange: TimeRange;
+  timeRanges: Record<TimeRange, TimeRangeData>;
+}
+
+export function generateMockChartData(timeRange: string, currentPrice: number = 100): ChartDataPoint[] {
   const now = Date.now();
-  const data = [];
-  let numPoints, interval, basePrice = 50;
+  const data: ChartDataPoint[] = [];
+  let numPoints: number, interval: number;
 
   switch(timeRange) {
     case '1D':
@@ -85,19 +116,75 @@ export function generateMockData(timeRange: string) {
       interval = 7 * 24 * 60 * 60 * 1000;
   }
 
+  // Generate prices that end at the current stock price
+  // Start from a price that's 10-30% lower (simulating growth over time)
+  const volatilityPercent = 0.02; // 2% volatility
+  const trendPercent = 0.15 + Math.random() * 0.15; // 15-30% growth
+  const startPrice = currentPrice / (1 + trendPercent);
+
   for (let i = 0; i < numPoints; i++) {
-    const trend = (i / numPoints) * 15;  // Upward trend
-    const volatility = (Math.random() - 0.4) * 4;
-    basePrice = 50 + trend + volatility;
-    basePrice = Math.max(40, Math.min(75, basePrice));
+    const progress = i / (numPoints - 1);
+    // Linear interpolation from start to current price with some noise
+    const trendPrice = startPrice + (currentPrice - startPrice) * progress;
+    const noise = trendPrice * volatilityPercent * (Math.random() - 0.5) * 2;
+    let price = trendPrice + noise;
+
+    // Last point should be exactly the current price
+    if (i === numPoints - 1) {
+      price = currentPrice;
+    }
 
     data.push({
-      time: now - (numPoints - i) * interval,
-      price: parseFloat(basePrice.toFixed(2))
+      time: now - (numPoints - 1 - i) * interval,
+      price: parseFloat(price.toFixed(2))
     });
   }
 
   return data;
 }
 
+export function generateStockGraphData(stock: Stock, timeRange: TimeRange = '1Y'): StockGraphData {
+  const chartData = generateMockChartData(timeRange, stock.price);
+  const startPrice = chartData[0].price;
+  const currentPrice = chartData[chartData.length - 1].price;
+  const priceChange = currentPrice - startPrice;
+  const changePercent = (priceChange / startPrice) * 100;
 
+  return {
+    stockSymbol: stock.ticker,
+    stockName: stock.name,
+    currentPrice,
+    priceChange,
+    changePercent,
+    timeRange,
+    chartData,
+  };
+}
+
+const ALL_TIME_RANGES: TimeRange[] = ['1D', '5D', '1M', '3M', '6M', '1Y', '3Y', '5Y'];
+
+export function generateStockGraphDataAllRanges(stock: Stock, defaultTimeRange: TimeRange = '1Y'): StockGraphDataAllRanges {
+  const timeRanges = {} as Record<TimeRange, TimeRangeData>;
+
+  for (const range of ALL_TIME_RANGES) {
+    const chartData = generateMockChartData(range, stock.price);
+    const startPrice = chartData[0].price;
+    const currentPrice = chartData[chartData.length - 1].price;
+    const priceChange = currentPrice - startPrice;
+    const changePercent = (priceChange / startPrice) * 100;
+
+    timeRanges[range] = {
+      chartData,
+      currentPrice,
+      priceChange,
+      changePercent,
+    };
+  }
+
+  return {
+    stockSymbol: stock.ticker,
+    stockName: stock.name,
+    timeRange: defaultTimeRange,
+    timeRanges,
+  };
+}

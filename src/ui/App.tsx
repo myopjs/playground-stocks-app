@@ -1,11 +1,10 @@
-import {MyopComponent} from "@myop/react";
 import './styles.css';
-import {useState} from "react";
+import {useState, useCallback} from "react";
 import {StocksList} from "./StocksList";
-import {COMPONENTS_IDS} from "../utils/componentsIds";
-import {generateMockData, getMockMarket, Stock} from "../utils/market";
+import {getMockMarket, Stock} from "../utils/market";
 import {StocksGraph} from "../ui/StockGraph";
 import {Portfolio} from "../ui/Portfolio";
+import {TopBar} from "../ui/TopBar";
 
 export function App() {
 
@@ -13,24 +12,25 @@ export function App() {
     const [stocks] = useState<Stock[]>(() => getMockMarket());
     const [selected, setSelected] = useState<Stock | null>(null);
 
+    const handleStockSelected = useCallback((stock: Stock | null) => {
+        console.log('App: Stock selected:', stock);
+        setSelected(stock);
+    }, []);
 
 
     return (
         <div>
-            <header className="header">
-                <MyopComponent componentId={COMPONENTS_IDS.topBar}/>
-            </header>
-            <main >
+            <TopBar/>
+            <main>
                 <div className="main">
-                    <StocksList stocks={stocks} onStockSelected={setSelected}/>
-                    <StocksGraph/>
+                    <StocksList stocks={stocks} onStockSelected={handleStockSelected}/>
+                    <StocksGraph selectedStock={selected}/>
                 </div>
                 <Portfolio/>
             </main>
             <footer>
 
             </footer>
-
         </div>
     );
 }
