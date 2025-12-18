@@ -9,6 +9,7 @@ import {Portfolio, PortfolioData, Holding} from "../ui/Portfolio";
 import {Loader} from "../ui/Loader";
 import {TradeModal} from "./TradeModal";
 import {TopBar} from "./TopBar";
+import {ConfirmationSellModal} from "./ConfirmationSellModal";
 
 const INITIAL_CASH = 100000;
 
@@ -18,6 +19,7 @@ export function App() {
     const [stocks] = useState<Stock[]>(initialMarket);
     const [selected, setSelected] = useState<Stock | null>(initialMarket[0] || null);
     const [modalStock, setModalStock] = useState<Stock | null>(null);
+    const [sellHolding, setSellHolding] = useState<Holding | null>(null);
     const [portfolio, setPortfolio] = useState<PortfolioData>({
         cash: INITIAL_CASH,
         holdingsValue: 0,
@@ -42,6 +44,15 @@ export function App() {
 
     const handleCloseModal = useCallback(() => {
         setModalStock(null);
+    }, []);
+
+    const handleHoldingClicked = useCallback((holding: Holding) => {
+        console.log('App: Holding clicked:', holding);
+        setSellHolding(holding);
+    }, []);
+
+    const handleCloseSellModal = useCallback(() => {
+        setSellHolding(null);
     }, []);
 
     const handlePurchase = useCallback((purchaseData: { stockSymbol: string; stockName: string; quantity: number; pricePerShare: number; totalCost: number }) => {
@@ -194,7 +205,19 @@ export function App() {
         });
 
         setModalStock(null);
+        setSellHolding(null);
     }, [stocks]);
+
+    const handlePortfolioSellConfirm = useCallback((payload: { stockSymbol: string; quantity: number; pricePerShare: number; totalProceeds: number }) => {
+        if (!sellHolding) return;
+        handleSell({
+            stockSymbol: payload.stockSymbol,
+            stockName: sellHolding.name,
+            quantity: payload.quantity,
+            pricePerShare: payload.pricePerShare,
+            totalProceeds: payload.totalProceeds
+        });
+    }, [sellHolding, handleSell]);
 
 
     return (
@@ -207,7 +230,7 @@ export function App() {
                     <StocksList stocks={stocks} portfolioHoldings={portfolio.holdings} selectedStock={selected} onStockSelected={handleStockSelected} onStockClicked={handleStockClicked}/>
                     <StocksGraph selectedStock={selected}/>
                 </div>
-                <Portfolio data={portfolio}/>
+                <Portfolio data={portfolio} onHoldingClicked={handleHoldingClicked}/>
             </main>
             <footer className="footer">
                 <MyopComponent componentId={COMPONENTS_IDS.footer} loader={<Loader/>}/>
@@ -220,6 +243,16 @@ export function App() {
                     onClose={handleCloseModal}
                     onPurchase={handlePurchase}
                     onSell={handleSell}
+                />
+            )}
+            {sellHolding && (
+                <ConfirmationSellModal
+                    stockSymbol={sellHolding.symbol}
+                    stockName={sellHolding.name}
+                    pricePerShare={sellHolding.currentPrice}
+                    quantity={sellHolding.quantity}
+                    onConfirm={handlePortfolioSellConfirm}
+                    onCancel={handleCloseSellModal}
                 />
             )}
         </div>
