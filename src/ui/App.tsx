@@ -133,7 +133,7 @@ export function App() {
             </header>
             <main>
                 <div className="main">
-                    <StocksList stocks={stocks} selectedStock={selected} onStockSelected={handleStockSelected} onStockClicked={handleStockClicked}/>
+                    <StocksList stocks={stocks} portfolioHoldings={portfolio.holdings} selectedStock={selected} onStockSelected={handleStockSelected} onStockClicked={handleStockClicked}/>
                     <StocksGraph selectedStock={selected}/>
                 </div>
                 <Portfolio data={portfolio}/>
