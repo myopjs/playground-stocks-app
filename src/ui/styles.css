@@ -53,3 +53,8 @@ body {
     width: 510px;
     height: 650px;
 }
+
+.confirmation-modal-content {
+    width: 510px;
+    height: 418px;
+}

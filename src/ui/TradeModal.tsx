@@ -1,15 +1,23 @@
 import {MyopComponent} from "@myop/react";
 import {COMPONENTS_IDS} from "../utils/componentsIds";
 import {Stock} from "../utils/market";
-import {useMemo, useCallback} from "react";
+import {useMemo, useCallback, useState} from "react";
 import {Loader} from "./Loader";
+import {ConfirmationModal} from "./ConfirmationModal";
 
 interface TradeModalProps {
     stock: Stock;
     onClose: () => void;
 }
 
+interface BuyDetails {
+    quantity: number;
+    price: number;
+}
+
 export const TradeModal = ({ stock, onClose }: TradeModalProps) => {
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [buyDetails, setBuyDetails] = useState<BuyDetails | null>(null);
 
     const modalData = useMemo(() => ({
         stock: {
@@ -33,13 +41,38 @@ export const TradeModal = ({ stock, onClose }: TradeModalProps) => {
         if (action === 'close-clicked') {
             onClose();
         } else if (action === 'buy-clicked') {
-            console.log('Buy order:', payload);
-            onClose();
+            console.log('Buy clicked:', payload);
+            setBuyDetails({ quantity: payload.quantity, price: payload.price });
+            setShowConfirmation(true);
         } else if (action === 'sell-clicked') {
             console.log('Sell order:', payload);
             onClose();
         }
     }, [onClose]);
+
+    const handleConfirm = useCallback((payload: any) => {
+        console.log('Purchase confirmed:', payload);
+        onClose();
+    }, [onClose]);
+
+    const handleCancelConfirmation = useCallback(() => {
+        setShowConfirmation(false);
+        setBuyDetails(null);
+    }, []);
+
+    if (showConfirmation && buyDetails) {
+        return (
+            <ConfirmationModal
+                stockSymbol={stock.ticker}
+                stockName={stock.name}
+                pricePerShare={buyDetails.price}
+                quantity={buyDetails.quantity}
+                actionType="buy"
+                onConfirm={handleConfirm}
+                onCancel={handleCancelConfirmation}
+            />
+        );
+    }
 
     return (
         <div className="modal-overlay" onClick={onClose}>
