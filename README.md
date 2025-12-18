@@ -28,20 +28,31 @@ npm run dev
 - Interactive stock price charts with multiple time ranges
 - Portfolio management with holdings tracking
 - Practice trading platform (simulated, no real money)
+- Buy and sell stocks with confirmation modals
+- Track portfolio performance with gain/loss calculations
+- Dynamic cash balance updates after trades
+- Daily change tracking for portfolio holdings
 
 ## Myop Components
 
 The application uses the following Myop components :
 
-### Top Bar 
-Navigation header component displaying the application branding and navigation elements.
+### Top Bar
+Navigation header component displaying:
+- Application branding and portfolio name
+- Cash available balance
+- Total portfolio value
+- Daily change with percentage (color-coded positive/negative)
+- User avatar
 
-### Stocks List 
+### Stocks List
 Displays a searchable list of stocks with the following features:
 - Search functionality to filter stocks by symbol or name
 - Tab navigation between "All Stocks" and "My Portfolio" views
 - Stock items showing symbol, company name, price, change percentage, and daily change
-- Double-click on a stock to view its chart
+- Click on a stock row to view its chart
+- Trade button on each stock to open the trading modal
+- "My Portfolio" tab shows only owned stocks with gain/loss since purchase
 - Visual selection state for the currently selected stock
 
 ### Stock Graph 
@@ -56,10 +67,34 @@ Interactive stock price chart component featuring:
 
 ### Portfolio
 Portfolio holdings table displaying:
-- Summary stats (total value, gain/loss)
+- Summary stats (cash, holdings value, total value, total gain/loss)
 - Holdings list with stock symbol, quantity, entry price, current price, and gain/loss
 - Empty state when no holdings exist
 - Click on a holding to view its details
+
+### Trade Modal
+Modal for buying and selling stocks featuring:
+- Stock information (symbol, name, current price, change percentage)
+- Account info (available cash, owned shares)
+- Quantity selector
+- Buy button (always available)
+- Sell button (enabled when user owns shares of the stock)
+
+### Confirmation Modal (Buy)
+Purchase confirmation modal displaying:
+- Stock symbol and name
+- Price per share
+- Quantity
+- Total cost
+- Confirm Purchase and Cancel buttons
+
+### Confirmation Modal (Sell)
+Sale confirmation modal displaying:
+- Stock symbol and name
+- Price per share
+- Quantity
+- Total proceeds
+- Confirm Sale and Cancel buttons
 
 ### Footer
 Simple footer component displaying a disclaimer: "Practice trading platform — No real money involved. All trades are simulated for educational purposes only."
