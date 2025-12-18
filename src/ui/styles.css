@@ -3,7 +3,7 @@ body {
 }
 
 .header {
-    height: 80px;
+    height: 91px;
 }
 
 
@@ -14,12 +14,12 @@ body {
 
 .stocks-list {
     width: 30vw;
-    height: calc(65vh - 80px - 34px);
+    height: calc(65vh - 91px - 34px);
 }
 
 .stock-graph {
     width: 70vw;
-    height: calc(65vh - 80px - 34px);
+    height: calc(65vh - 91px - 34px);
 }
 
 .portfolio {
