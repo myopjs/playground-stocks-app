@@ -49,7 +49,7 @@ export const TradeModal = ({ stock, availableCash, ownedShares, onClose, onPurch
             changePercent: stock.changePct,
             changeAmount: stock.price * (stock.changePct / 100),
             lastUpdated: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
-            sector: /* stock.sector ||*/ 'Technology'
+            sector: stock.sector
         },
         account: {
             availableCash,

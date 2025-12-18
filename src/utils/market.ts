@@ -6,29 +6,30 @@ export type Stock = {
   high: number;
   low: number;
   volume: number;
+  sector: string;
 };
 
 export function getMockMarket(): Stock[] {
   const base: Array<Omit<Stock, 'price' | 'changePct' | 'high' | 'low' | 'volume'>> = [
-    { ticker: 'AAPL', name: 'Apple Inc.' },
-    { ticker: 'MSFT', name: 'Microsoft Corp.' },
-    { ticker: 'GOOGL', name: 'Alphabet Inc.' },
-    { ticker: 'AMZN', name: 'Amazon.com Inc.' },
-    { ticker: 'TSLA', name: 'Tesla Inc.' },
-    { ticker: 'NVDA', name: 'NVIDIA Corp.' },
-    { ticker: 'META', name: 'Meta Platforms Inc.' },
-    { ticker: 'NFLX', name: 'Netflix Inc.' },
-    { ticker: 'BRK.B', name: 'Berkshire Hathaway' },
-    { ticker: 'JPM', name: 'JPMorgan Chase & Co.' },
+    { ticker: 'AAPL', name: 'Apple Inc.', sector: 'Technology' },
+    { ticker: 'MSFT', name: 'Microsoft Corp.', sector: 'Technology' },
+    { ticker: 'GOOGL', name: 'Alphabet Inc.', sector: 'Technology' },
+    { ticker: 'AMZN', name: 'Amazon.com Inc.', sector: 'Consumer Cyclical' },
+    { ticker: 'TSLA', name: 'Tesla Inc.', sector: 'Automotive' },
+    { ticker: 'NVDA', name: 'NVIDIA Corp.', sector: 'Technology' },
+    { ticker: 'META', name: 'Meta Platforms Inc.', sector: 'Technology' },
+    { ticker: 'NFLX', name: 'Netflix Inc.', sector: 'Communication Services' },
+    { ticker: 'BRK.B', name: 'Berkshire Hathaway', sector: 'Financial Services' },
+    { ticker: 'JPM', name: 'JPMorgan Chase & Co.', sector: 'Financial Services' },
   ];
 
-  return base.map(({ ticker, name }) => {
+  return base.map(({ ticker, name, sector }) => {
     const price = 50 + Math.random() * 350;
     const changePct = (Math.random() - 0.5) * 4; // -2% to +2%
     const high = price * (1 + Math.random() * 0.02);
     const low = price * (1 - Math.random() * 0.02);
     const volume = Math.floor(1_000_000 + Math.random() * 5_000_000);
-    return { ticker, name, price, changePct, high, low, volume };
+    return { ticker, name, price, changePct, high, low, volume, sector };
   });
 }
 
