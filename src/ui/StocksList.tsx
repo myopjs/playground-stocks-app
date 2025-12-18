@@ -20,9 +20,10 @@ interface StocksListProps {
     stocks: Stock[];
     selectedStock: Stock | null;
     onStockSelected: (stock: Stock | null) => void;
+    onStockClicked: (stock: Stock) => void;
 }
 
-export const StocksList = ({ stocks, selectedStock, onStockSelected }: StocksListProps) => {
+export const StocksList = ({ stocks, selectedStock, onStockSelected, onStockClicked }: StocksListProps) => {
 
     // Transform stocks to format expected by stocksList.html
     const stocksData = useMemo(() => {
@@ -46,8 +47,13 @@ export const StocksList = ({ stocks, selectedStock, onStockSelected }: StocksLis
             const selectedStock = stocks.find(s => s.ticker === payload.symbol);
             console.log('Found stock:', selectedStock);
             onStockSelected(selectedStock || null);
+        } else if (action === 'trade_clicked' && payload) {
+            const clickedStock = stocks.find(s => s.ticker === payload.symbol);
+            if (clickedStock) {
+                onStockClicked(clickedStock);
+            }
         }
-    }, [stocks, onStockSelected]);
+    }, [stocks, onStockSelected, onStockClicked]);
 
     return <div className='stocks-list'>
         <MyopComponent
