@@ -4,6 +4,7 @@ import {Stock} from "../utils/market";
 import {useMemo, useCallback, useState} from "react";
 import {Loader} from "./Loader";
 import {ConfirmationModal} from "./ConfirmationModal";
+import {ConfirmationSellModal} from "./ConfirmationSellModal";
 
 interface PurchaseData {
     stockSymbol: string;
@@ -13,20 +14,32 @@ interface PurchaseData {
     totalCost: number;
 }
 
-interface TradeModalProps {
-    stock: Stock;
-    onClose: () => void;
-    onPurchase: (data: PurchaseData) => void;
+interface SellData {
+    stockSymbol: string;
+    stockName: string;
+    quantity: number;
+    pricePerShare: number;
+    totalProceeds: number;
 }
 
-interface BuyDetails {
+interface TradeModalProps {
+    stock: Stock;
+    availableCash: number;
+    ownedShares: number;
+    onClose: () => void;
+    onPurchase: (data: PurchaseData) => void;
+    onSell: (data: SellData) => void;
+}
+
+interface TradeDetails {
     quantity: number;
     price: number;
 }
 
-export const TradeModal = ({ stock, onClose, onPurchase }: TradeModalProps) => {
-    const [showConfirmation, setShowConfirmation] = useState(false);
-    const [buyDetails, setBuyDetails] = useState<BuyDetails | null>(null);
+export const TradeModal = ({ stock, availableCash, ownedShares, onClose, onPurchase, onSell }: TradeModalProps) => {
+    const [showBuyConfirmation, setShowBuyConfirmation] = useState(false);
+    const [showSellConfirmation, setShowSellConfirmation] = useState(false);
+    const [tradeDetails, setTradeDetails] = useState<TradeDetails | null>(null);
 
     const modalData = useMemo(() => ({
         stock: {
@@ -39,11 +52,11 @@ export const TradeModal = ({ stock, onClose, onPurchase }: TradeModalProps) => {
             sector: /* stock.sector ||*/ 'Technology'
         },
         account: {
-            availableCash: 100000.00,
-            ownedShares: 0
+            availableCash,
+            ownedShares
         },
         quantity: 1
-    }), [stock]);
+    }), [stock, availableCash, ownedShares]);
 
     const handleCta = useCallback((action: string, payload: any) => {
         console.log('TradeModal CTA:', action, payload);
@@ -51,11 +64,12 @@ export const TradeModal = ({ stock, onClose, onPurchase }: TradeModalProps) => {
             onClose();
         } else if (action === 'buy-clicked') {
             console.log('Buy clicked:', payload);
-            setBuyDetails({ quantity: payload.quantity, price: payload.price });
-            setShowConfirmation(true);
+            setTradeDetails({ quantity: payload.quantity, price: payload.price });
+            setShowBuyConfirmation(true);
         } else if (action === 'sell-clicked') {
-            console.log('Sell order:', payload);
-            onClose();
+            console.log('Sell clicked:', payload);
+            setTradeDetails({ quantity: payload.quantity, price: payload.price });
+            setShowSellConfirmation(true);
         }
     }, [onClose]);
 
@@ -70,20 +84,45 @@ export const TradeModal = ({ stock, onClose, onPurchase }: TradeModalProps) => {
         });
     }, [onPurchase, stock]);
 
+    const handleSellConfirm = useCallback((payload: any) => {
+        console.log('Sale confirmed:', payload);
+        onSell({
+            stockSymbol: stock.ticker,
+            stockName: stock.name,
+            quantity: payload.quantity,
+            pricePerShare: payload.pricePerShare,
+            totalProceeds: payload.totalProceeds
+        });
+    }, [onSell, stock]);
+
     const handleCancelConfirmation = useCallback(() => {
-        setShowConfirmation(false);
-        setBuyDetails(null);
+        setShowBuyConfirmation(false);
+        setShowSellConfirmation(false);
+        setTradeDetails(null);
     }, []);
 
-    if (showConfirmation && buyDetails) {
+    if (showBuyConfirmation && tradeDetails) {
         return (
             <ConfirmationModal
                 stockSymbol={stock.ticker}
                 stockName={stock.name}
-                pricePerShare={buyDetails.price}
-                quantity={buyDetails.quantity}
+                pricePerShare={tradeDetails.price}
+                quantity={tradeDetails.quantity}
                 actionType="buy"
                 onConfirm={handleConfirm}
+                onCancel={handleCancelConfirmation}
+            />
+        );
+    }
+
+    if (showSellConfirmation && tradeDetails) {
+        return (
+            <ConfirmationSellModal
+                stockSymbol={stock.ticker}
+                stockName={stock.name}
+                pricePerShare={tradeDetails.price}
+                quantity={tradeDetails.quantity}
+                onConfirm={handleSellConfirm}
                 onCancel={handleCancelConfirmation}
             />
         );

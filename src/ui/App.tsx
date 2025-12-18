@@ -125,6 +125,77 @@ export function App() {
         setModalStock(null);
     }, [stocks]);
 
+    const handleSell = useCallback((sellData: { stockSymbol: string; stockName: string; quantity: number; pricePerShare: number; totalProceeds: number }) => {
+        console.log('Sale completed:', sellData);
+
+        setPortfolio(prev => {
+            const existingHoldingIndex = prev.holdings.findIndex(h => h.symbol === sellData.stockSymbol);
+            if (existingHoldingIndex < 0) {
+                // No holding found, nothing to sell
+                return prev;
+            }
+
+            const existingHolding = prev.holdings[existingHoldingIndex];
+            const remainingQuantity = existingHolding.quantity - sellData.quantity;
+            let newHoldings: Holding[];
+
+            if (remainingQuantity <= 0) {
+                // Remove holding entirely
+                newHoldings = prev.holdings.filter((_, index) => index !== existingHoldingIndex);
+            } else {
+                // Update holding with remaining quantity
+                newHoldings = prev.holdings.map((holding, index) => {
+                    if (index === existingHoldingIndex) {
+                        const currentStock = stocks.find(s => s.ticker === sellData.stockSymbol);
+                        const currentPrice = currentStock?.price || sellData.pricePerShare;
+                        const gainLossValue = (currentPrice - holding.entryPrice) * remainingQuantity;
+                        const gainLossPercent = ((currentPrice - holding.entryPrice) / holding.entryPrice) * 100;
+
+                        return {
+                            ...holding,
+                            quantity: remainingQuantity,
+                            currentPrice,
+                            gainLossPercent,
+                            gainLossValue
+                        };
+                    }
+                    return holding;
+                });
+            }
+
+            const newCash = prev.cash + sellData.totalProceeds;
+            const holdingsValue = newHoldings.reduce((sum, h) => sum + (h.currentPrice * h.quantity), 0);
+            const totalValue = newCash + holdingsValue;
+            const totalInvested = newHoldings.reduce((sum, h) => sum + (h.entryPrice * h.quantity), 0);
+            const gainLoss = holdingsValue - totalInvested;
+            const gainLossPercentage = totalInvested > 0 ? (gainLoss / totalInvested) * 100 : 0;
+
+            // Calculate daily change based on each stock's daily changePct
+            const dailyChange = newHoldings.reduce((sum, h) => {
+                const stock = stocks.find(s => s.ticker === h.symbol);
+                if (stock) {
+                    const holdingValue = h.currentPrice * h.quantity;
+                    return sum + (holdingValue * (stock.changePct / 100));
+                }
+                return sum;
+            }, 0);
+            const dailyChangePercent = holdingsValue > 0 ? (dailyChange / holdingsValue) * 100 : 0;
+
+            return {
+                cash: newCash,
+                holdingsValue,
+                totalValue,
+                gainLoss,
+                gainLossPercentage,
+                dailyChange,
+                dailyChangePercent,
+                holdings: newHoldings
+            };
+        });
+
+        setModalStock(null);
+    }, [stocks]);
+
 
     return (
         <div>
@@ -142,7 +213,14 @@ export function App() {
                 <MyopComponent componentId={COMPONENTS_IDS.footer} loader={<Loader/>}/>
             </footer>
             {modalStock && (
-                <TradeModal stock={modalStock} onClose={handleCloseModal} onPurchase={handlePurchase}/>
+                <TradeModal
+                    stock={modalStock}
+                    availableCash={portfolio.cash}
+                    ownedShares={portfolio.holdings.find(h => h.symbol === modalStock.ticker)?.quantity || 0}
+                    onClose={handleCloseModal}
+                    onPurchase={handlePurchase}
+                    onSell={handleSell}
+                />
             )}
         </div>
     );
