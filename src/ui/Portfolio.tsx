@@ -3,30 +3,33 @@ import {COMPONENTS_IDS} from "../utils/componentsIds";
 import './styles.css';
 import {Loader} from "../ui/Loader";
 
-export const Portfolio = () => {
+export interface Holding {
+    id: string;
+    symbol: string;
+    name: string;
+    quantity: number;
+    entryPrice: number;
+    currentPrice: number;
+    gainLossPercent: number;
+    gainLossValue: number;
+}
 
-    // const data = {
-    //     cash: 6109.02,
-    //     holdingsValue: 3895.34,
-    //     totalValue: 10004.36,
-    //     gainLoss: 4.36,
-    //     gainLossPercentage: 0.11,
-    //     holdings: [
-    //         {
-    //             id: '1',
-    //             symbol: 'AZRG',
-    //             name: 'Azrieli Group',
-    //             quantity: 12,
-    //             entryPrice: 312.09,
-    //             currentPrice: 312.45,
-    //             gainLossPercent: 0.12,
-    //             gainLossValue: 4.36
-    //         }
-    //     ]
-    // };
+export interface PortfolioData {
+    cash: number;
+    holdingsValue: number;
+    totalValue: number;
+    gainLoss: number;
+    gainLossPercentage: number;
+    dailyChange: number;
+    dailyChangePercent: number;
+    holdings: Holding[];
+}
 
-    const data = {};
+interface PortfolioProps {
+    data: PortfolioData;
+}
 
+export const Portfolio = ({ data }: PortfolioProps) => {
 
     return <div className='portfolio'>
         <MyopComponent componentId={COMPONENTS_IDS.portfolio} data={data} loader={<Loader/>} />

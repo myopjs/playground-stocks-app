@@ -5,9 +5,18 @@ import {useMemo, useCallback, useState} from "react";
 import {Loader} from "./Loader";
 import {ConfirmationModal} from "./ConfirmationModal";
 
+interface PurchaseData {
+    stockSymbol: string;
+    stockName: string;
+    quantity: number;
+    pricePerShare: number;
+    totalCost: number;
+}
+
 interface TradeModalProps {
     stock: Stock;
     onClose: () => void;
+    onPurchase: (data: PurchaseData) => void;
 }
 
 interface BuyDetails {
@@ -15,7 +24,7 @@ interface BuyDetails {
     price: number;
 }
 
-export const TradeModal = ({ stock, onClose }: TradeModalProps) => {
+export const TradeModal = ({ stock, onClose, onPurchase }: TradeModalProps) => {
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [buyDetails, setBuyDetails] = useState<BuyDetails | null>(null);
 
@@ -52,8 +61,14 @@ export const TradeModal = ({ stock, onClose }: TradeModalProps) => {
 
     const handleConfirm = useCallback((payload: any) => {
         console.log('Purchase confirmed:', payload);
-        onClose();
-    }, [onClose]);
+        onPurchase({
+            stockSymbol: stock.ticker,
+            stockName: stock.name,
+            quantity: payload.quantity,
+            pricePerShare: payload.pricePerShare,
+            totalCost: payload.totalCost
+        });
+    }, [onPurchase, stock]);
 
     const handleCancelConfirmation = useCallback(() => {
         setShowConfirmation(false);
