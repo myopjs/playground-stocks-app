@@ -1,7 +1,7 @@
-import {MyopComponent} from "@myop/react";
+import {MyopComponent, preloadComponents} from "@myop/react";
 import {COMPONENTS_IDS} from "../utils/componentsIds";
 import './styles.css';
-import {useState, useCallback, useMemo} from "react";
+import {useState, useCallback, useMemo, useEffect} from "react";
 import {StocksList} from "./StocksList";
 import {getMockMarket, Stock} from "../utils/market";
 import {StocksGraph} from "../ui/StockGraph";
@@ -30,6 +30,10 @@ export function App() {
         dailyChangePercent: 0,
         holdings: []
     });
+
+    useEffect(() => {
+        preloadComponents(Object.values(COMPONENTS_IDS), 'production').then(() => console.log('all components loaded successfully!'));
+    }, [])
 
     const handleStockSelected = useCallback((stock: Stock | null) => {
         console.log('App: Stock selected (double-click):', stock);
