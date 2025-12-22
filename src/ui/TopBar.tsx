@@ -56,7 +56,7 @@ export const TopBar = ({ portfolio, userName = "Demo User", userInitials = "DU",
             if (paramKey) {
                 const url = new URL(window.location.href);
                 url.searchParams.set(paramKey, componentId);
-                window.location.href = url.toString();
+                window.open(url.toString(), '_blank');
             }
         }
     }, []);
