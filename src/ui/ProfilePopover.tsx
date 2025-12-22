@@ -50,7 +50,7 @@ export const ProfilePopover = ({
         config: {
             isVisible: true
         },
-        selectedComponent: 'Stocks List',
+        selectedComponent: 'stockList',
         componentId: ''
     }), [userName, userEmail, userInitials]);
 
@@ -78,7 +78,7 @@ export const ProfilePopover = ({
             }
         };
 
-        let timeoutId: NodeJS.Timeout;
+        let timeoutId: ReturnType<typeof setTimeout>;
 
         if (isVisible) {
             // Small delay to prevent immediate close from the same click that opened the popover

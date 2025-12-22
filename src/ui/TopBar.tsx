@@ -37,27 +37,12 @@ export const TopBar = ({ portfolio, userName = "Demo User", userInitials = "DU",
         setShowPopover(false);
     }, []);
 
-    const componentToParamKey: Record<string, string> = {
-        'Stocks List': QUERY_PARAMS.stockList,
-        'Top Bar': QUERY_PARAMS.topBar,
-        'Stock Graph': QUERY_PARAMS.stockGraph,
-        'Portfolio': QUERY_PARAMS.portfolio,
-        'Footer': QUERY_PARAMS.footer,
-        'Trade Modal': QUERY_PARAMS.tradeModal,
-        'Confirmation Modal (Buy)': QUERY_PARAMS.confirmationModal,
-        'Confirmation Modal (Sell)': QUERY_PARAMS.confirmationSellModal,
-        'Profile Popover': QUERY_PARAMS.profilePopover
-    };
-
     const handleOpenComponent = useCallback((componentId: string, selectedComponent: string) => {
         console.log('Open component:', selectedComponent, 'with ID:', componentId);
-        if (componentId) {
-            const paramKey = componentToParamKey[selectedComponent];
-            if (paramKey) {
-                const url = new URL(window.location.href);
-                url.searchParams.set(paramKey, componentId);
-                window.open(url.toString(), '_blank');
-            }
+        if (componentId && selectedComponent) {
+            const url = new URL(window.location.href);
+            url.searchParams.set(selectedComponent, componentId);
+            window.open(url.toString(), '_blank');
         }
     }, []);
 
