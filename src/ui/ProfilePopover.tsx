@@ -33,7 +33,7 @@ export const ProfilePopover = ({
             setAnimationClass('fade-out');
             const timer = setTimeout(() => {
                 setShouldRender(false);
-            }, 200); // Match the animation duration
+            }, 100); // Match the animation duration
             return () => clearTimeout(timer);
         }
     }, [isVisible, shouldRender]);
@@ -74,12 +74,18 @@ export const ProfilePopover = ({
             }
         };
 
+        let timeoutId: NodeJS.Timeout;
+
         if (isVisible) {
-            document.addEventListener('mousedown', handleClickOutside);
+            // Small delay to prevent immediate close from the same click that opened the popover
+            timeoutId = setTimeout(() => {
+                document.addEventListener('mousedown', handleClickOutside);
+            }, 10);
             document.addEventListener('keydown', handleEscape);
         }
 
         return () => {
+            clearTimeout(timeoutId);
             document.removeEventListener('mousedown', handleClickOutside);
             document.removeEventListener('keydown', handleEscape);
         };
@@ -88,16 +94,22 @@ export const ProfilePopover = ({
     if (!shouldRender) return null;
 
     return (
-        <div
-            ref={popoverRef}
-            className={`profile-popover-container ${animationClass}`}
-        >
-            <MyopComponent
-                componentId={getComponentId(QUERY_PARAMS.profilePopover)}
-                data={popoverData}
-                on={handleCta as any}
-                loader={<Loader/>}
+        <>
+            <div
+                className="profile-popover-backdrop"
+                onClick={onClose}
             />
-        </div>
+            <div
+                ref={popoverRef}
+                className={`profile-popover-container ${animationClass}`}
+            >
+                <MyopComponent
+                    componentId={getComponentId(QUERY_PARAMS.profilePopover)}
+                    data={popoverData}
+                    on={handleCta as any}
+                    loader={<Loader/>}
+                />
+            </div>
+        </>
     );
 };

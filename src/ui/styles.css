@@ -59,6 +59,15 @@ body {
     height: 418px;
 }
 
+.profile-popover-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+}
+
 .profile-popover-container {
     position: fixed;
     top: 70px;
@@ -99,4 +108,8 @@ body {
         opacity: 0;
         transform: translateY(-10px);
     }
+}
+
+.profile-popover-container.fade-out {
+    animation: fadeOut 0.1s ease-out forwards;
 }
