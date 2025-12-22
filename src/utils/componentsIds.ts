@@ -6,5 +6,6 @@ export const COMPONENTS_IDS = {
     footer: 'c3d15436-526e-41d3-aac0-a44c5295c1ec', //footer.html
     tradeModal: '0e71be0f-bd65-4ee5-b4fe-361a016947c9', //tradeModal.html
     confirmationModal: 'fc6e9b5d-2180-47b3-b0d0-0d6d9dfc96ae', //confirmationModal.html
-    confirmationSellModal: '69a98ff0-f3b3-4a2b-8fab-50d072138c16' //confirmationSell.html
+    confirmationSellModal: '69a98ff0-f3b3-4a2b-8fab-50d072138c16', //confirmationSell.html
+    profilePopover: 'a62bb61b-e2f6-4c83-965e-49c6da7de6c2', //
 }

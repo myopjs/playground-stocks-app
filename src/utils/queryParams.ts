@@ -8,7 +8,8 @@ export const QUERY_PARAMS = {
     footer: 'footer',
     tradeModal: 'tradeModal',
     confirmationModal: 'confirmationModal',
-    confirmationSellModal: 'confirmationSellModal'
+    confirmationSellModal: 'confirmationSellModal',
+    profilePopover: 'profilePopover'
 } as const;
 
 type ComponentKey = keyof typeof QUERY_PARAMS;

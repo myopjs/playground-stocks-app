@@ -99,6 +99,15 @@ Sale confirmation modal displaying:
 ### Footer
 Simple footer component displaying a disclaimer: "Practice trading platform — No real money involved. All trades are simulated for educational purposes only."
 
+### Profile Popover
+A popover component that appears when clicking on the user avatar in the top bar, featuring:
+- User profile display (name, email, initials/avatar)
+- Component selector dropdown to choose which component to override
+- Component ID input field
+- "Open" button to apply the component override via URL query parameters
+- Fade in/out animations on open/close
+- Closes when clicking outside or pressing Escape
+
 ## Query Parameters for Component Overrides
 
 You can override any Myop component ID at runtime using URL query parameters. This is useful for testing different component versions or switching between development and production components.
@@ -115,6 +124,7 @@ You can override any Myop component ID at runtime using URL query parameters. Th
 | `tradeModal` | Override the Trade Modal component |
 | `confirmationModal` | Override the Confirmation Modal (Buy) component |
 | `confirmationSellModal` | Override the Confirmation Modal (Sell) component |
+| `profilePopover` | Override the Profile Popover component |
 
 ### Usage Example
 

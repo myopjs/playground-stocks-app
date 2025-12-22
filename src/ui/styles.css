@@ -58,3 +58,45 @@ body {
     width: 510px;
     height: 418px;
 }
+
+.profile-popover-container {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    width: 300px;
+    height: 320px;
+    z-index: 10000;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: fadeIn 0.2s ease-out forwards;
+}
+
+.profile-popover-container.fade-in {
+    animation: fadeIn 0.2s ease-out forwards;
+}
+
+.profile-popover-container.fade-out {
+    animation: fadeOut 0.2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
