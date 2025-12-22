@@ -142,6 +142,201 @@ http://localhost:5173/?stockList=id1&topBar=id2&portfolio=id3
 
 If no query parameter is provided, the application uses the default component IDs defined in `componentsIds.ts`.
 
+## Component Data Structures
+
+When creating custom components to override the default ones, your component must implement the `myop_init_interface(data)` function to receive the following data structures:
+
+### Top Bar
+
+```typescript
+interface TopBarData {
+    portfolioName: string;        // e.g., "My Portfolio Demo"
+    portfolioSubtitle: string;    // e.g., "Practice trading, no real money involved"
+    cashAvailable: number;        // e.g., 100000.00
+    portfolioValue: number;       // e.g., 125750.50
+    dailyChange: number;          // e.g., 1250.75
+    dailyChangePercent: number;   // e.g., 1.02
+    userInitials: string;         // e.g., "JD"
+    userName: string;             // e.g., "John Doe"
+}
+```
+
+**CTA Actions emitted:**
+- `avatar_clicked` - When user clicks on the avatar
+
+### Stocks List
+
+```typescript
+interface StocksListData {
+    stocks: StockItem[];           // All available stocks
+    portfolioStocks: StockItem[];  // Stocks owned by user
+    selectedSymbol: string;        // Currently selected stock symbol
+}
+
+interface StockItem {
+    symbol: string;        // e.g., "AAPL"
+    name: string;          // e.g., "Apple Inc."
+    price: number;         // e.g., 178.50
+    change: number;        // e.g., 2.35
+    changePercent: number; // e.g., 1.33
+    updatedAt: string;     // e.g., "14:32"
+    currency: string;      // e.g., "$"
+    quantity?: number;     // Only for portfolio stocks
+}
+```
+
+**CTA Actions emitted:**
+- `stock_selected` - `{ symbol: string }` - When user double-clicks a stock
+- `trade_clicked` - `{ symbol: string }` - When user clicks trade button
+
+### Stock Graph
+
+```typescript
+interface StockGraphData {
+    stockSymbol: string;           // e.g., "AAPL"
+    stockName: string;             // e.g., "Apple Inc."
+    currentPrice: number;          // e.g., 178.50
+    priceChange: number;           // e.g., 2.35
+    changePercent: number;         // e.g., 1.33
+    timeRange: string;             // e.g., "1Y"
+    timeRanges: {                  // Data for all time ranges
+        [key: string]: {
+            chartData: { time: string; price: number }[];
+            currentPrice: number;
+            priceChange: number;
+            changePercent: number;
+        }
+    };
+}
+
+// Special action to clear the chart:
+{ action: 'clear' }
+```
+
+**CTA Actions emitted:**
+- `time_range_changed` - `{ range: string }` - When user selects a different time range
+
+### Portfolio
+
+```typescript
+interface PortfolioData {
+    cash: number;              // Available cash
+    holdingsValue: number;     // Total value of holdings
+    totalValue: number;        // cash + holdingsValue
+    gainLoss: number;          // Total gain/loss amount
+    gainLossPercentage: number;// Total gain/loss percentage
+    dailyChange: number;       // Daily change amount
+    dailyChangePercent: number;// Daily change percentage
+    holdings: Holding[];       // Array of holdings
+}
+
+interface Holding {
+    id: string;              // Unique identifier
+    symbol: string;          // e.g., "AAPL"
+    name: string;            // e.g., "Apple Inc."
+    quantity: number;        // Number of shares
+    entryPrice: number;      // Average purchase price
+    currentPrice: number;    // Current market price
+    gainLossPercent: number; // Gain/loss percentage
+    gainLossValue: number;   // Gain/loss dollar amount
+}
+```
+
+**CTA Actions emitted:**
+- `holding_clicked` - `{ symbol, name, quantity, entryPrice, currentPrice, gainLossPercent, gainLossValue }` - When user clicks a holding
+
+### Trade Modal
+
+```typescript
+interface TradeModalData {
+    stock: {
+        symbol: string;        // e.g., "AAPL"
+        name: string;          // e.g., "Apple Inc."
+        currentPrice: number;  // e.g., 178.50
+        changePercent: number; // e.g., 1.33
+        changeAmount: number;  // e.g., 2.35
+        lastUpdated: string;   // e.g., "14:32"
+        sector: string;        // e.g., "Technology"
+    };
+    account: {
+        availableCash: number; // e.g., 100000.00
+        ownedShares: number;   // e.g., 10
+    };
+    quantity: number;          // Initial quantity (default: 1)
+}
+```
+
+**CTA Actions emitted:**
+- `buy-clicked` - `{ quantity: number, price: number, totalCost: number }`
+- `sell-clicked` - `{ quantity: number, price: number, totalValue: number }`
+- `close-clicked` - When modal is closed
+
+### Confirmation Modal (Buy)
+
+```typescript
+interface ConfirmationModalData {
+    title: string;           // e.g., "Confirm Purchase"
+    stockSymbol: string;     // e.g., "AAPL"
+    stockName: string;       // e.g., "Apple Inc."
+    pricePerShare: number;   // e.g., 178.50
+    quantity: number;        // e.g., 10
+    actionType: 'buy' | 'sell';
+}
+```
+
+**CTA Actions emitted:**
+- `confirm-clicked` - `{ actionType, stockSymbol, quantity, pricePerShare, totalCost }`
+- `cancel-clicked` - When user cancels
+- `close-clicked` - When modal is closed
+
+### Confirmation Modal (Sell)
+
+```typescript
+interface ConfirmationSellModalData {
+    stockSymbol: string;     // e.g., "AAPL"
+    stockName: string;       // e.g., "Apple Inc."
+    pricePerShare: number;   // e.g., 178.50
+    quantity: number;        // e.g., 10
+}
+```
+
+**CTA Actions emitted:**
+- `confirm-sale-clicked` - `{ stockSymbol, quantity, pricePerShare, totalProceeds }`
+- `cancel-clicked` - When user cancels
+- `close-clicked` - When modal is closed
+
+### Footer
+
+```typescript
+interface FooterData {
+    text?: string;  // Optional custom footer text
+}
+```
+
+### Profile Popover
+
+```typescript
+interface ProfilePopoverData {
+    userData: {
+        name: string;              // e.g., "Maya Chen"
+        email: string;             // e.g., "maya.chen@example.com"
+        initials: string;          // e.g., "MC"
+        profileImage?: string | null;
+    };
+    config: {
+        isVisible: boolean;
+    };
+    selectedComponent: string;     // e.g., "Stocks List"
+    componentId: string;           // Component ID input value
+}
+```
+
+**CTA Actions emitted:**
+- `component_selected` - `{ component: string }` - When user selects a component from dropdown
+- `open_clicked` - `{ componentId: string, selectedComponent: string }` - When user clicks Open
+- `click_outside` - When user clicks outside the popover
+- `escape_pressed` - When user presses Escape key
+
 ## Tech Stack
 - React 18
 - TypeScript
