@@ -1,6 +1,6 @@
 import {generateStockGraphDataAllRanges, Stock} from "../utils/market";
 import {MyopComponent} from "@myop/react";
-import {COMPONENTS_IDS} from "../utils/componentsIds";
+import {getComponentId, QUERY_PARAMS} from "../utils/queryParams";
 import './styles.css';
 import {useMemo} from "react";
 import {Loader} from "../ui/Loader";
@@ -19,7 +19,7 @@ export const StocksGraph = ({ selectedStock }: StocksGraphProps) => {
     }, [selectedStock]);
 
     return <div className='stock-graph'>
-        <MyopComponent componentId={COMPONENTS_IDS.stockGraph} data={stockData} loader={<Loader/>}/>
+        <MyopComponent componentId={getComponentId(QUERY_PARAMS.stockGraph)} data={stockData} loader={<Loader/>}/>
     </div>
 
 }

@@ -1,5 +1,5 @@
 import {MyopComponent} from "@myop/react";
-import {COMPONENTS_IDS} from "../utils/componentsIds";
+import {getComponentId, QUERY_PARAMS} from "../utils/queryParams";
 import {Stock} from "../utils/market";
 import {useMemo, useCallback} from "react";
 import './styles.css';
@@ -86,7 +86,7 @@ export const StocksList = ({ stocks, portfolioHoldings, selectedStock, onStockSe
 
     return <div className='stocks-list'>
         <MyopComponent
-            componentId={COMPONENTS_IDS.stockList}
+            componentId={getComponentId(QUERY_PARAMS.stockList)}
             data={stocksData}
             on={handleCta as any}
             loader={<Loader/>}

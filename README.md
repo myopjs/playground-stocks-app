@@ -99,6 +99,39 @@ Sale confirmation modal displaying:
 ### Footer
 Simple footer component displaying a disclaimer: "Practice trading platform — No real money involved. All trades are simulated for educational purposes only."
 
+## Query Parameters for Component Overrides
+
+You can override any Myop component ID at runtime using URL query parameters. This is useful for testing different component versions or switching between development and production components.
+
+### Available Query Parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `stockList` | Override the Stocks List component |
+| `topBar` | Override the Top Bar component |
+| `stockGraph` | Override the Stock Graph component |
+| `portfolio` | Override the Portfolio component |
+| `footer` | Override the Footer component |
+| `tradeModal` | Override the Trade Modal component |
+| `confirmationModal` | Override the Confirmation Modal (Buy) component |
+| `confirmationSellModal` | Override the Confirmation Modal (Sell) component |
+
+### Usage Example
+
+To override a component, add the query parameter with the desired component ID:
+
+```
+http://localhost:5173/?stockList=your-custom-component-id
+```
+
+You can override multiple components at once:
+
+```
+http://localhost:5173/?stockList=id1&topBar=id2&portfolio=id3
+```
+
+If no query parameter is provided, the application uses the default component IDs defined in `componentsIds.ts`.
+
 ## Tech Stack
 - React 18
 - TypeScript

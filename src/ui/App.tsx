@@ -1,5 +1,6 @@
 import {MyopComponent, preloadComponents} from "@myop/react";
 import {COMPONENTS_IDS} from "../utils/componentsIds";
+import {getComponentId, QUERY_PARAMS} from "../utils/queryParams";
 import './styles.css';
 import {useState, useCallback, useMemo, useEffect} from "react";
 import {StocksList} from "./StocksList";
@@ -37,7 +38,7 @@ export function App() {
 
     const handleStockSelected = useCallback((stock: Stock | null) => {
         console.log('App: Stock selected (double-click):', stock);
-        // Create a new object to force re-render even if same stock is selected
+        // Create a new object to force re-render even if the same stock is selected
         setSelected(stock ? {...stock} : null);
     }, []);
 
@@ -237,7 +238,7 @@ export function App() {
                 <Portfolio data={portfolio} onHoldingClicked={handleHoldingClicked}/>
             </main>
             <footer className="footer">
-                <MyopComponent componentId={COMPONENTS_IDS.footer} loader={<Loader/>}/>
+                <MyopComponent componentId={getComponentId(QUERY_PARAMS.footer)} loader={<Loader/>}/>
             </footer>
             {modalStock && (
                 <TradeModal

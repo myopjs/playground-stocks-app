@@ -1,5 +1,5 @@
 import {MyopComponent} from "@myop/react";
-import {COMPONENTS_IDS} from "../utils/componentsIds";
+import {getComponentId, QUERY_PARAMS} from "../utils/queryParams";
 import {useMemo, useCallback} from "react";
 import {Loader} from "./Loader";
 
@@ -45,7 +45,7 @@ export const ConfirmationModal = ({
         <div className="modal-overlay" onClick={onCancel}>
             <div className="confirmation-modal-content" onClick={(e) => e.stopPropagation()}>
                 <MyopComponent
-                    componentId={COMPONENTS_IDS.confirmationModal}
+                    componentId={getComponentId(QUERY_PARAMS.confirmationModal)}
                     data={modalData}
                     on={handleCta as any}
                     loader={<Loader/>}

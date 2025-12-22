@@ -1,5 +1,5 @@
 import {MyopComponent} from "@myop/react";
-import {COMPONENTS_IDS} from "../utils/componentsIds";
+import {getComponentId, QUERY_PARAMS} from "../utils/queryParams";
 import './styles.css';
 import {Loader} from "../ui/Loader";
 import {useCallback} from "react";
@@ -53,7 +53,7 @@ export const Portfolio = ({ data, onHoldingClicked }: PortfolioProps) => {
 
     return <div className='portfolio'>
         <MyopComponent
-            componentId={COMPONENTS_IDS.portfolio}
+            componentId={getComponentId(QUERY_PARAMS.portfolio)}
             data={data}
             on={handleCta as any}
             loader={<Loader/>}

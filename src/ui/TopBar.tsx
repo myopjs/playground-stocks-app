@@ -1,5 +1,5 @@
 import {MyopComponent} from "@myop/react";
-import {COMPONENTS_IDS} from "../utils/componentsIds";
+import {getComponentId, QUERY_PARAMS} from "../utils/queryParams";
 import {useMemo} from "react";
 import {Loader} from "./Loader";
 import {PortfolioData} from "./Portfolio";
@@ -25,7 +25,7 @@ export const TopBar = ({ portfolio, userName = "Demo User", userInitials = "DU" 
 
     return (
         <MyopComponent
-            componentId={COMPONENTS_IDS.topBar}
+            componentId={getComponentId(QUERY_PARAMS.topBar)}
             data={topBarData}
             loader={<Loader/>}
         />

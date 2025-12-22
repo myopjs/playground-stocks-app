@@ -1,5 +1,5 @@
 import {MyopComponent} from "@myop/react";
-import {COMPONENTS_IDS} from "../utils/componentsIds";
+import {getComponentId, QUERY_PARAMS} from "../utils/queryParams";
 import {Stock} from "../utils/market";
 import {useMemo, useCallback, useState} from "react";
 import {Loader} from "./Loader";
@@ -132,7 +132,7 @@ export const TradeModal = ({ stock, availableCash, ownedShares, onClose, onPurch
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <MyopComponent
-                    componentId={COMPONENTS_IDS.tradeModal}
+                    componentId={getComponentId(QUERY_PARAMS.tradeModal)}
                     data={modalData}
                     on={handleCta as any}
                     loader={<Loader/>}
