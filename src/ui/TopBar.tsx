@@ -37,22 +37,21 @@ export const TopBar = ({ portfolio, userName = "Demo User", userInitials = "DU",
         setShowPopover(false);
     }, []);
 
+    const componentToParamKey: Record<string, string> = {
+        'Stocks List': QUERY_PARAMS.stockList,
+        'Top Bar': QUERY_PARAMS.topBar,
+        'Stock Graph': QUERY_PARAMS.stockGraph,
+        'Portfolio': QUERY_PARAMS.portfolio,
+        'Footer': QUERY_PARAMS.footer,
+        'Trade Modal': QUERY_PARAMS.tradeModal,
+        'Confirmation Modal (Buy)': QUERY_PARAMS.confirmationModal,
+        'Confirmation Modal (Sell)': QUERY_PARAMS.confirmationSellModal,
+        'Profile Popover': QUERY_PARAMS.profilePopover
+    };
+
     const handleOpenComponent = useCallback((componentId: string, selectedComponent: string) => {
         console.log('Open component:', selectedComponent, 'with ID:', componentId);
         if (componentId) {
-            // Map dropdown display names to QUERY_PARAMS keys
-            const componentToParamKey: Record<string, string> = {
-                'Stocks List': QUERY_PARAMS.stockList,
-                'Top Bar': QUERY_PARAMS.topBar,
-                'Stock Graph': QUERY_PARAMS.stockGraph,
-                'Portfolio': QUERY_PARAMS.portfolio,
-                'Footer': QUERY_PARAMS.footer,
-                'Trade Modal': QUERY_PARAMS.tradeModal,
-                'Confirmation Modal (Buy)': QUERY_PARAMS.confirmationModal,
-                'Confirmation Modal (Sell)': QUERY_PARAMS.confirmationSellModal,
-                'Profile Popover': QUERY_PARAMS.profilePopover
-            };
-
             const paramKey = componentToParamKey[selectedComponent];
             if (paramKey) {
                 const url = new URL(window.location.href);
@@ -60,6 +59,12 @@ export const TopBar = ({ portfolio, userName = "Demo User", userInitials = "DU",
                 window.location.href = url.toString();
             }
         }
+    }, []);
+
+    const handleShare = useCallback(() => {
+        navigator.clipboard.writeText(window.location.href).catch((err) => {
+            console.error('Failed to copy link:', err);
+        });
     }, []);
 
     return (
@@ -77,6 +82,7 @@ export const TopBar = ({ portfolio, userName = "Demo User", userInitials = "DU",
                 userInitials={userInitials}
                 onClose={handleClosePopover}
                 onOpenComponent={handleOpenComponent}
+                onShare={handleShare}
             />
         </>
     );

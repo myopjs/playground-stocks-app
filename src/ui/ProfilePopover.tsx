@@ -11,6 +11,7 @@ interface ProfilePopoverProps {
     userInitials: string;
     onClose: () => void;
     onOpenComponent?: (componentId: string, selectedComponent: string) => void;
+    onShare?: () => void;
 }
 
 export const ProfilePopover = ({
@@ -19,7 +20,8 @@ export const ProfilePopover = ({
     userEmail,
     userInitials,
     onClose,
-    onOpenComponent
+    onOpenComponent,
+    onShare
 }: ProfilePopoverProps) => {
     const popoverRef = useRef<HTMLDivElement>(null);
     const [shouldRender, setShouldRender] = useState(isVisible);
@@ -58,8 +60,10 @@ export const ProfilePopover = ({
             onClose();
         } else if (action === 'open_clicked' && onOpenComponent) {
             onOpenComponent(payload.componentId, payload.selectedComponent);
+        } else if (action === 'share_clicked' && onShare) {
+            onShare();
         }
-    }, [onClose, onOpenComponent]);
+    }, [onClose, onOpenComponent, onShare]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
