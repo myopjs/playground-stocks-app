@@ -1,1 +1,1 @@
-{"root":["./src/main.tsx","./src/ui/app.tsx","./src/ui/homepage.tsx","./src/ui/portfoliopage.tsx","./src/ui/stockmodal.tsx","./src/utils/market.ts"],"version":"5.9.3"}
+{"root":["./src/main.tsx","./src/ui/app.tsx","./src/ui/confirmationmodal.tsx","./src/ui/confirmationsellmodal.tsx","./src/ui/loader.tsx","./src/ui/portfolio.tsx","./src/ui/profilepopover.tsx","./src/ui/stockgraph.tsx","./src/ui/stockslist.tsx","./src/ui/topbar.tsx","./src/ui/trademodal.tsx","./src/utils/componentsids.ts","./src/utils/market.ts","./src/utils/queryparams.ts"],"version":"5.9.3"}
